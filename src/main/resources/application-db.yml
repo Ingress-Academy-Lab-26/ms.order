@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ms_order
+    username: root
+    password: password
+  jpa:
+    show-sql: true
+    open-in-view: false
+  liquibase:
+    change-log: classpath:liquibase/changelog-master.yml
