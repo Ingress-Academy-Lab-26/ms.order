@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version "${springBootVersion}"
 	id 'io.spring.dependency-management' version "${springDependencyManagement}"
+	id 'groovy'
 }
 
 group = 'az.ingress'
@@ -35,12 +36,25 @@ dependencies {
 	//feign
 	implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
 
+	//security
+	implementation "com.nimbusds:nimbus-jose-jwt:${nimbusVersion}"
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
+
 	//db
 	runtimeOnly 'org.postgresql:postgresql'
+
+	//rabbit mq
+	implementation "org.springframework.boot:spring-boot-starter-amqp"
 
 	//lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	//unit test
+	implementation group: "org.apache.groovy", name: "groovy", version: "${groovyVersion}"
+	testImplementation group:"org.spockframework", name: "spock-spring", version: "${spockVersion}"
+	testImplementation "io.github.benas:random-beans:${randomBeansVersion}"
 
 
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

@@ -32,13 +32,4 @@ public enum AddressMapper {
                 .deliveryLocation(addressEntity.getDeliveryLocation())
                 .build();
     }
-
-    public static AddressEntity updateAddressEntity(AddressEntity addressEntity, AddressRequest addressRequest) {
-        addressEntity.setCountry(addressRequest.getCountry());
-        addressEntity.setCity(addressRequest.getCity());
-        addressEntity.setStreet(addressRequest.getStreet());
-        addressEntity.setDeliveryLocation(addressRequest.getDeliveryLocation());
-        addressEntity.setUpdatedAt(now());
-        return addressEntity;
-    }
 }

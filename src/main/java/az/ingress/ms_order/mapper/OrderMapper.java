@@ -1,8 +1,13 @@
 package az.ingress.ms_order.mapper;
 
 import az.ingress.ms_order.dao.entity.OrderEntity;
+import az.ingress.ms_order.model.client.payment.PaymentRequestDto;
 import az.ingress.ms_order.model.request.OrderRequest;
 import az.ingress.ms_order.model.response.OrderResponse;
+import az.ingress.ms_order.model.response.PageableResponse;
+import org.springframework.data.domain.Page;
+
+import java.util.Collections;
 
 import static az.ingress.ms_order.mapper.AddressMapper.toAddressResponse;
 import static az.ingress.ms_order.mapper.OrderItemMapper.toOrderItemsResponses;
@@ -16,6 +21,7 @@ public enum OrderMapper {
         return OrderResponse.builder()
                 .id(orderEntity.getId())
                 .userId(orderEntity.getUserId())
+                .cardId(orderEntity.getCardId())
                 .amount(orderEntity.getAmount())
                 .address(toAddressResponse(orderEntity.getAddress()))
                 .orderItems(toOrderItemsResponses(orderEntity.getOrderItems()))
@@ -27,6 +33,26 @@ public enum OrderMapper {
                 .userId(orderRequest.getUserId())
                 .status(IN_PROGRESS)
                 .paymentStatus(PROGRESS)
+                .cardId(orderRequest.getCardId())
+                .build();
+    }
+
+    public static PageableResponse mapToPageableResponse(Page<OrderEntity> entities) {
+        return PageableResponse
+                .builder()
+                .content(Collections.singletonList(entities.map(OrderMapper::toOrderResponse).stream().toList()))
+                .totalElements(entities.getTotalElements())
+                .hasNextPage(entities.hasNext())
+                .lastPageNumber(entities.getTotalPages())
+                .build();
+    }
+
+    public static PaymentRequestDto toPaymentRequestDto(OrderEntity orderEntity) {
+        return PaymentRequestDto.builder()
+                .id(orderEntity.getId())
+                .userId(orderEntity.getUserId())
+                .cardId(orderEntity.getCardId())
+                .amount(orderEntity.getAmount())
                 .build();
     }
 }

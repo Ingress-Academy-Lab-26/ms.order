@@ -13,7 +13,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Where;
@@ -39,7 +38,6 @@ public class OrderItemEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
-
     private Long productId;
     private Long quantity;
     private BigDecimal price;
@@ -55,4 +53,16 @@ public class OrderItemEntity {
     @JoinColumn(name = "order_id")
     private OrderEntity order;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderItemEntity that = (OrderItemEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

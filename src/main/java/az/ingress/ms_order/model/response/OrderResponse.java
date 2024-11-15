@@ -16,6 +16,7 @@ import java.util.Set;
 public class OrderResponse {
     private Long id;
     private Long userId;
+    private Long cardId;
     private BigDecimal amount;
     private AddressResponse address;
     private List<OrderItemResponse> orderItems;

@@ -1,6 +1,11 @@
 client:
   ms-auth:
     url: http://localhost:8484
+  ms-product:
+    url: http://localhost:8181
+  ms-payment:
+    url: http://localhost:8282
+
 
 redis:
   server:
@@ -8,7 +13,5 @@ redis:
 
 rabbitmq:
   publisher-service:
-    queue: PUBLISHER_Q
-    dlq: PUBLISHER_DLQ
-
-
+    queue: NOTIFICATION_Q
+    dlq: NOTIFICATION_DLQ

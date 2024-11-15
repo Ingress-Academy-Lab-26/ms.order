@@ -24,7 +24,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import static jakarta.persistence.CascadeType.MERGE;
 import static jakarta.persistence.CascadeType.PERSIST;
@@ -47,6 +46,7 @@ public class OrderEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private Long userId;
+    private Long cardId;
     private BigDecimal amount;
 
     @Enumerated(STRING)

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Log
-@Service
+@Service(value = "authService")
 @RequiredArgsConstructor
 public class AuthServiceHandler implements AuthService {
     private final AuthClient authClient;

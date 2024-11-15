@@ -3,6 +3,7 @@ package az.ingress.ms_order.model.request;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Bean;
 
 @Data
 @AllArgsConstructor
