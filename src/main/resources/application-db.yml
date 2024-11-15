@@ -8,7 +8,6 @@ spring:
     open-in-view: false
   liquibase:
     change-log: classpath:liquibase/changelog-master.yml
-#    drop-first: true
   rabbitmq:
     host: localhost
     username: guest
