@@ -1,0 +1,16 @@
+client:
+  ms-auth:
+    url: http://localhost:8484
+  ms-product:
+    url: http://localhost:8181
+  ms-payment:
+    url: http://localhost:8282
+
+
+rabbitmq:
+  publisher-service:
+    queue: NOTIFICATION_Q
+    dlq: NOTIFICATION_DLQ
+  product-service:
+    queue: PRODUCT_Q
+    dlq: PRODUCT_DLQ
