@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import static az.ingress.ms_order.model.enums.DateTimeConstants.DATE_PATTERN;
+import static az.ingress.ms_order.model.constants.DateTimeConstants.DATE_PATTERN;
 
 
 @Data

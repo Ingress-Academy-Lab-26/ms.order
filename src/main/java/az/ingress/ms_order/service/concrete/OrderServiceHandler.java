@@ -1,6 +1,6 @@
 package az.ingress.ms_order.service.concrete;
 
-import az.ingress.ms_order.aop.annotation.Log;
+import az.ingress.ms_order.annotation.Log;
 import az.ingress.ms_order.client.PaymentClient;
 import az.ingress.ms_order.client.ProductClient;
 import az.ingress.ms_order.dao.entity.OrderEntity;
@@ -17,12 +17,11 @@ import az.ingress.ms_order.model.queue.NotificationDto;
 import az.ingress.ms_order.model.request.OrderRequest;
 import az.ingress.ms_order.model.response.OrderResponse;
 import az.ingress.ms_order.model.response.PageableResponse;
-import az.ingress.ms_order.queue.QueueSender;
+import az.ingress.ms_order.queue.QueueProducer;
 import az.ingress.ms_order.service.abstraction.OrderService;
 import az.ingress.ms_order.service.specification.OrderSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -48,10 +47,12 @@ import static az.ingress.ms_order.model.enums.OrderStatus.DELETED;
 import static az.ingress.ms_order.model.enums.PaymentStatus.CANCELED;
 import static az.ingress.ms_order.model.enums.PaymentStatus.PAID;
 import static az.ingress.ms_order.model.enums.QueueName.NOTIFICATION_Q;
+import static az.ingress.ms_order.model.enums.QueueName.PRODUCT_Q;
 import static az.ingress.ms_order.model.queue.ChannelType.MAIL;
 import static az.ingress.ms_order.model.queue.ChannelType.TELEGRAM;
 import static az.ingress.ms_order.util.OrderUtil.calculateTotalAmount;
 import static az.ingress.ms_order.util.OrderUtil.generatePayload;
+import static az.ingress.ms_order.dao.entity.OrderEntity.Fields.id;
 
 @Log
 @Slf4j
@@ -61,7 +62,7 @@ public class OrderServiceHandler implements OrderService {
     private final OrderRepository orderRepository;
     private final ProductClient productClient;
     private final PaymentClient paymentClient;
-    private final QueueSender queueSender;
+    private final QueueProducer queueProducer;
 
     @Override
     public PageableResponse getAllOrders(PageCriteria pageCriteria, OrderCriteria cardCriteria) {
@@ -69,7 +70,7 @@ public class OrderServiceHandler implements OrderService {
                 new OrderSpecification(cardCriteria),
                 PageRequest.of(pageCriteria.getPage(),
                         pageCriteria.getCount(),
-                        Sort.by("id").descending()));
+                        Sort.by(id).descending()));
 
         return mapToPageableResponse(orders);
     }
@@ -90,8 +91,8 @@ public class OrderServiceHandler implements OrderService {
         calculateTotalAmount(order);
         sendPaymentRequest(order);
 
-        productClient.updateQuantity(toUpdateProductStockDto(order.getOrderItems()));
         orderRepository.save(order);
+        sendProductUpdateQueue(order.getOrderItems());
         sendNotification(order);
     }
 
@@ -167,6 +168,11 @@ public class OrderServiceHandler implements OrderService {
         }
     }
 
+    private void sendProductUpdateQueue(List<OrderItemEntity> orderItems) {
+        var updateProductStockDto = toUpdateProductStockDto(orderItems);
+        queueProducer.sendMessageToQ(PRODUCT_Q.name(), updateProductStockDto);
+    }
+
     private void sendNotification(OrderEntity order) {
         var telegramNotification = NotificationDto
                                             .builder()
@@ -179,7 +185,7 @@ public class OrderServiceHandler implements OrderService {
                                             .payload(generatePayload(order))
                                             .channelType(MAIL)
                                             .build();
-        queueSender.sendMessageToQ(NOTIFICATION_Q.name(), telegramNotification);
-        queueSender.sendMessageToQ(NOTIFICATION_Q.name(), mailNotification);
+        queueProducer.sendMessageToQ(NOTIFICATION_Q.name(), telegramNotification);
+        queueProducer.sendMessageToQ(NOTIFICATION_Q.name(), mailNotification);
     }
 }

@@ -1,12 +1,10 @@
 package az.ingress.ms_order.service.concrete;
 
-import az.ingress.ms_order.aop.annotation.Log;
 import az.ingress.ms_order.client.AuthClient;
 import az.ingress.ms_order.service.abstraction.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Log
 @Service(value = "authService")
 @RequiredArgsConstructor
 public class AuthServiceHandler implements AuthService {

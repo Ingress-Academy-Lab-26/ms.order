@@ -59,8 +59,7 @@ public class OrderEntity {
     @CreationTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToOne(cascade = {PERSIST, MERGE},
-            fetch = LAZY)
+    @OneToOne(cascade = {PERSIST, MERGE})
     @JoinColumn(name = "address_id")
     private AddressEntity address;
 

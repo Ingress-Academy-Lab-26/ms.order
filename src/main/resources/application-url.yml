@@ -7,11 +7,10 @@ client:
     url: http://localhost:8282
 
 
-redis:
-  server:
-    urls: redis://localhost:6379
-
 rabbitmq:
   publisher-service:
     queue: NOTIFICATION_Q
     dlq: NOTIFICATION_DLQ
+  product-service:
+    queue: PRODUCT_Q
+    dlq: PRODUCT_DLQ

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name= "ms-payment",
                 url = "${client.ms-payment.url}",
                 configuration = CustomErrorDecoder.class,
-                path = "/internal/v1")
+                path = "/internal/v1/payments")
 public interface PaymentClient {
     @PostMapping
-    Boolean createPayment(@RequestBody PaymentRequestDto paymentRequestDto);
+    void createPayment(@RequestBody PaymentRequestDto paymentRequestDto);
 }

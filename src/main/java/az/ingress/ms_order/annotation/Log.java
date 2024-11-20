@@ -1,4 +1,4 @@
-package az.ingress.ms_order.aop.annotation;
+package az.ingress.ms_order.annotation;
 
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;

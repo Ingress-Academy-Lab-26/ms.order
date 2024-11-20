@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +14,8 @@ import static az.ingress.ms_order.mapper.ObjectMapperFactory.OBJECT_MAPPER;
 @Aspect
 @Slf4j
 public class LoggingAspect {
-
-    @Pointcut("within(@az.ingress.ms_order.aop.annotation.Log *)")
-    public void loggingPointCut() {
-    }
-
     @SneakyThrows
-    @Around(value = "loggingPointCut()")
+    @Around("within(@az.ingress.ms_order.annotation.Log *)")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         var signature = ((MethodSignature)joinPoint.getSignature());
         var parameters = OBJECT_MAPPER.getInstance().writeValueAsString(joinPoint.getArgs());

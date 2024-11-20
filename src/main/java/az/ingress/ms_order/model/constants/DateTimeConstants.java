@@ -1,4 +1,4 @@
-package az.ingress.ms_order.model.enums;
+package az.ingress.ms_order.model.constants;
 
 import lombok.RequiredArgsConstructor;
 

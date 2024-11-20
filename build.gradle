@@ -3,6 +3,7 @@ plugins {
 	id 'org.springframework.boot' version "${springBootVersion}"
 	id 'io.spring.dependency-management' version "${springDependencyManagement}"
 	id 'groovy'
+	id 'org.hibernate.orm' version "${hibernateEnhancement}"
 }
 
 group = 'az.ingress'
@@ -29,6 +30,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Hibernate enhancement dependency
+	implementation "org.hibernate:hibernate-enhancer:${hibernateEnhancement}"
 
 	//liquibase
 	implementation 'org.liquibase:liquibase-core'
@@ -73,4 +77,12 @@ dependencyManagement {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+hibernate {
+	enhancement {
+		enableLazyInitialization = true
+		enableDirtyTracking = true
+		enableAssociationManagement = true
+	}
 }

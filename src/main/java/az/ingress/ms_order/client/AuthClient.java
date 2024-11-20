@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-@FeignClient(name= "ms-auth", url = "${client.ms-auth.url}", path = "/v1/verify")
+@FeignClient(name= "ms-auth", url = "${client.ms-auth.url}", path = "/internal/v1/auth")
 public interface AuthClient {
 
-    @PostMapping
+    @PostMapping("/verify")
     void verify(@RequestHeader(AUTHORIZATION) String accessToken);
 }
